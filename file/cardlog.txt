@@ -1,0 +1,56 @@
+account log:
+ignored:could not convert string to float: #cardata.txt
+ignored:could not convert string to float: previous balance
+data .... processed 25.0 
+ignored:could not convert string to float: debits
+data .... processed 21.64 
+data .... processed 541.24 
+data .... processed 25.0 
+ignored:could not convert string to float: credits
+data .... processed -25.0 
+data .... processed -541.24 
+ignored:could not convert string to float: finance charge/late fees
+data .... processed 7.3 
+data .... processed 5.0 
+account log:
+ignored:could not convert string to float: #cardata.txt
+ignored:could not convert string to float: previous balance
+data .... processed 25.0 
+ignored:could not convert string to float: debits
+data .... processed 21.64 
+data .... processed 541.24 
+data .... processed 25.0 
+ignored:could not convert string to float: credits
+data .... processed -25.0 
+data .... processed -541.24 
+ignored:could not convert string to float: finance charge/late fees
+data .... processed 7.3 
+data .... processed 5.0 
+account log:
+ignored:could not convert string to float: #cardata.txt
+ignored:could not convert string to float: previous balance
+data .... processed 25.0 
+ignored:could not convert string to float: debits
+data .... processed 21.64 
+data .... processed 541.24 
+data .... processed 25.0 
+ignored:could not convert string to float: credits
+data .... processed -25.0 
+data .... processed -541.24 
+ignored:could not convert string to float: finance charge/late fees
+data .... processed 7.3 
+data .... processed 5.0 
+account log:
+ignored:could not convert string to float: #cardata.txt
+ignored:could not convert string to float: previous balance
+data .... processed 25.0 
+ignored:could not convert string to float: debits
+data .... processed 21.64 
+data .... processed 541.24 
+data .... processed 25.0 
+ignored:could not convert string to float: credits
+data .... processed -25.0 
+data .... processed -541.24 
+ignored:could not convert string to float: finance charge/late fees
+data .... processed 7.3 
+data .... processed 5.0 
