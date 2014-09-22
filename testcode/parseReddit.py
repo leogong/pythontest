@@ -77,13 +77,13 @@ def log(my_string):
 
 csvheaders = []
 csvheadersset = False
-authoridx = -1;
-subredditidx = -1;
-domainidx = -1;
-utcidx = -1;
-scoreidx = -1;
-upsidx = -1;
-downsidx = -1;
+authoridx = -1
+subredditidx = -1
+domainidx = -1
+utcidx = -1
+scoreidx = -1
+upsidx = -1
+downsidx = -1
 numcommentsidx = -1
 
 if (os.path.exists(fileName)):
@@ -117,10 +117,10 @@ if (os.path.exists(fileName)):
                 for qrow in q:
                     if (addrow[authoridx] == qrow[authoridx] and addrow[subredditidx] == qrow[subredditidx] and addrow[
                         domainidx] == qrow[domainidx] and addrow[utcidx] == qrow[utcidx]):
-                        qrow[scoreidx] = addrow[scoreidx];
-                        qrow[upsidx] = addrow[upsidx];
-                        qrow[downsidx] = addrow[downsidx];
-                        qrow[numcommentsidx] = addrow[numcommentsidx];
+                        qrow[scoreidx] = addrow[scoreidx]
+                        qrow[upsidx] = addrow[upsidx]
+                        qrow[downsidx] = addrow[downsidx]
+                        qrow[numcommentsidx] = addrow[numcommentsidx]
                         duplicates = duplicates + 1
                         break
                 else:
@@ -156,10 +156,10 @@ while (True):
             for qrow in q:
                 if (curr[authoridx] == qrow[authoridx] and curr[subredditidx] == qrow[subredditidx] and curr[
                     domainidx] == qrow[domainidx] and curr[utcidx] == qrow[utcidx]):
-                    qrow[scoreidx] = curr[scoreidx];
-                    qrow[upsidx] = curr[upsidx];
-                    qrow[downsidx] = curr[downsidx];
-                    qrow[numcommentsidx] = curr[numcommentsidx];
+                    qrow[scoreidx] = curr[scoreidx]
+                    qrow[upsidx] = curr[upsidx]
+                    qrow[downsidx] = curr[downsidx]
+                    qrow[numcommentsidx] = curr[numcommentsidx]
                     duplicates = duplicates + 1
                     break
 
