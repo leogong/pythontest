@@ -3,68 +3,72 @@
 
 from lxml.html import soupparser
 from lxml import etree
-import os
 import re
+import urllib2
 import time
-
-# rewrite_links good!
 
 
 class MyCraw():
-    def __init__(self):
-        pass
+    url = None
+    html_content = None
+    valuable = None
+    article_content = None
+    final_html = ""
+    copy_site_domain = None
+    my_domain = "http://static.javacode.cn/wp-content/uploads/" + time.strftime('%Y/%m', time.localtime(time.time()))
 
 
-def replace_pre_tag(pre_tag):
-    if pre_tag.tag == 'pre':
-        class_attr_str = pre_tag.get('class')
-        match = re.search("brush:(.*?);", class_attr_str)
-        if match:
-            pre_tag.tag = match.group(1).strip()
-            body = etree.SubElement(pre_tag, "java")
-            print pre_tag.text
+    def __init__(self, url):
+        self.url = url
+        re_search = re.search(r"http://(.*?)/", url)
+        self.copy_site_domain = re_search.group(1)
+
+    def get_info_from_url(self):
+
+        self.html_content = urllib2.urlopen(self.url).read()
+
+    def replace_pre_code(self, code):
+        p = re.compile(r'<pre.*?brush:(.*?);.*?>([\s\S]*?)</pre>')
+
+        def func(m):
+            return '[' + m.group(1).strip() + ']' + m.group(2) + '[/' + m.group(1).strip() + ']'
+
+        return p.sub(func, code)
+
+    def get_article_content(self):
+        root = soupparser.fromstring(self.html_content)
+        article_sub_element = root.find('.//div[@class="post"]/div[@class="content"]')
+        # remote letter of thanks
+        if "感谢" in etree.tostring(article_sub_element[0], encoding="utf-8"):
+            article_sub_element = article_sub_element[1:len(article_sub_element) - 1]
+        for sub_element in article_sub_element:
+            if "（全文完）" in sub_element:
+                break
+            img_list = sub_element.findall('.//img')
+            if img_list is not None:
+                for img_tag in img_list:
+                    img_src = img_tag.get("src")
+                    new_image_url = self.my_domain + img_src[img_src.rindex("/"):]
+                    img_tag.set('src', new_image_url)
+                    img_parent = img_tag.getparent()
+                    if img_parent is not None and img_parent.tag == 'a':
+                        img_parent.set('href', new_image_url)
+            a_tag_list = sub_element.findall('.//a')
+            for a_tag in a_tag_list:
+                if a_tag is not None:
+                    child_img = a_tag.find('img')
+                    if child_img is None:
+                        url_href = a_tag.get('href')
+                        # if url_href and self.copy_site_domain in url_href:
+                        #     print url_href
+            sub_element_string = etree.tostring(sub_element, encoding="utf-8", method="html", pretty_print=True)
+            print sub_element_string
+            self.final_html += sub_element_string
+        # print self.replace_pre_code(self.final_html)
 
 
-copy_site = 'coolshell.cn'
-img_path = "/home/leo/aa"
-domain = "http://static.javacode.cn/wp-content/uploads/" + time.strftime('%Y/%m', time.localtime(time.time()))
-if not os.path.exists(img_path):
-    os.mkdir(img_path)
-html_content = ''.join(open("/home/leo/b.htm", "r").readlines())
-dom = soupparser.fromstring(html_content)
-article_content = dom.find('.//div[@class="post"]/div[@class="content"]')
-# remote letter of thanks
-if "感谢" in etree.tostring(article_content[0], encoding="utf-8"):
-    article_content = article_content[1:len(article_content) - 1]
-for p_tag in article_content:
-    img_list = p_tag.findall('.//img')
-    if img_list is not None and len(img_list):
-        for img_tag in img_list:
-            img_src = img_tag.get("src")
-            new_image_url = domain + img_src[img_src.rindex("/"):]
-            img_tag.set('src', new_image_url)
-            img_parent = img_tag.getparent()
-            if img_parent is not None and img_parent.tag == 'a':
-                img_parent.set('href', new_image_url)
-    a_tag_list = p_tag.findall('.//a')
-    for a_tag in a_tag_list:
-        if a_tag is not None:
-            child_img = a_tag.find('img')
-            if child_img is None:
-                url_href = a_tag.get('href')
-                if copy_site in url_href:
-                    print url_href
-
-    if p_tag.tag == 'pre':
-        replace_pre_tag(p_tag)
-    else:
-        pre_list = p_tag.findall('.//pre')
-        for pre_tag in pre_list:
-            replace_pre_tag(pre_tag)
-
-
-
-            # print etree.tostring(p_tag, encoding="utf-8",method="html",pretty_print=True)
-
+my_craw = MyCraw("http://coolshell.cn/articles/12012.html")
+my_craw.get_info_from_url()
+my_craw.get_article_content()
 
 
