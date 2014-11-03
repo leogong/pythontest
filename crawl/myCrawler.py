@@ -8,7 +8,7 @@ import urllib2
 import time
 
 
-class MyCraw():
+class MyCrawler():
     url = None
     html_content = None
     valuable = None
@@ -42,7 +42,7 @@ class MyCraw():
         if "感谢" in etree.tostring(article_sub_element[0], encoding="utf-8"):
             article_sub_element = article_sub_element[1:len(article_sub_element) - 1]
         for sub_element in article_sub_element:
-            if "（全文完）" in sub_element:
+            if "（全文完）" in etree.tostring(sub_element, encoding="utf-8", method="html", pretty_print=True):
                 break
             img_list = sub_element.findall('.//img')
             if img_list is not None:
@@ -67,7 +67,7 @@ class MyCraw():
         # print self.replace_pre_code(self.final_html)
 
 
-my_craw = MyCraw("http://coolshell.cn/articles/12012.html")
+my_craw = MyCrawler("http://coolshell.cn/articles/12012.html")
 my_craw.get_info_from_url()
 my_craw.get_article_content()
 
