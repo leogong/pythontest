@@ -27,13 +27,13 @@ class MyCrawler():
 
         self.html_content = urllib2.urlopen(self.url).read()
 
-    def replace_pre_code(self, code):
+    def replace_pre_code(self):
         p = re.compile(r'<pre.*?brush:(.*?);.*?>([\s\S]*?)</pre>')
 
         def func(m):
             return '[' + m.group(1).strip() + ']' + m.group(2) + '[/' + m.group(1).strip() + ']'
 
-        return p.sub(func, code)
+        return p.sub(func, self.html_content)
 
     def get_article_content(self):
         root = soupparser.fromstring(self.html_content)
@@ -64,7 +64,7 @@ class MyCrawler():
             sub_element_string = etree.tostring(sub_element, encoding="utf-8", method="html", pretty_print=True)
             print sub_element_string
             self.final_html += sub_element_string
-        # print self.replace_pre_code(self.final_html)
+        print self.replace_pre_code()
 
 
 my_craw = MyCrawler("http://coolshell.cn/articles/12012.html")
