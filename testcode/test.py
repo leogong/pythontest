@@ -1,6 +1,10 @@
 # coding=utf-8
-import sys
+from lxml import etree
+from lxml.html import soupparser
 
 __author__ = 'leo'
 
-print "here"
+html = soupparser.fromstring("<div><a href> aa </a></div>")
+html_findall = html.findall(".//a")
+for a in html_findall:
+    print etree.tostring(a, encoding="utf-8", method="html", pretty_print=True)

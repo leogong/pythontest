@@ -1,74 +1,1 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-from lxml.html import soupparser
-from lxml import etree
-import re
-import urllib2
-import time
-
-
-class MyCrawler():
-    url = None
-    html_content = None
-    valuable = None
-    article_content = None
-    final_html = ""
-    copy_site_domain = None
-    my_domain = "http://static.javacode.cn/wp-content/uploads/" + time.strftime('%Y/%m', time.localtime(time.time()))
-
-
-    def __init__(self, url):
-        self.url = url
-        re_search = re.search(r"http://(.*?)/", url)
-        self.copy_site_domain = re_search.group(1)
-
-    def get_info_from_url(self):
-
-        self.html_content = urllib2.urlopen(self.url).read()
-
-    def replace_pre_code(self):
-        p = re.compile(r'<pre.*?brush:(.*?);.*?>([\s\S]*?)</pre>')
-
-        def func(m):
-            return '[' + m.group(1).strip() + ']' + m.group(2) + '[/' + m.group(1).strip() + ']'
-
-        return p.sub(func, self.html_content)
-
-    def get_article_content(self):
-        root = soupparser.fromstring(self.html_content)
-        article_sub_element = root.find('.//div[@class="post"]/div[@class="content"]')
-        # remote letter of thanks
-        if "感谢" in etree.tostring(article_sub_element[0], encoding="utf-8"):
-            article_sub_element = article_sub_element[1:len(article_sub_element) - 1]
-        for sub_element in article_sub_element:
-            if "（全文完）" in etree.tostring(sub_element, encoding="utf-8", method="html", pretty_print=True):
-                break
-            img_list = sub_element.findall('.//img')
-            if img_list is not None:
-                for img_tag in img_list:
-                    img_src = img_tag.get("src")
-                    new_image_url = self.my_domain + img_src[img_src.rindex("/"):]
-                    img_tag.set('src', new_image_url)
-                    img_parent = img_tag.getparent()
-                    if img_parent is not None and img_parent.tag == 'a':
-                        img_parent.set('href', new_image_url)
-            a_tag_list = sub_element.findall('.//a')
-            for a_tag in a_tag_list:
-                if a_tag is not None:
-                    child_img = a_tag.find('img')
-                    if child_img is None:
-                        url_href = a_tag.get('href')
-                        # if url_href and self.copy_site_domain in url_href:
-                        #     print url_href
-            sub_element_string = etree.tostring(sub_element, encoding="utf-8", method="html", pretty_print=True)
-            print sub_element_string
-            self.final_html += sub_element_string
-        print self.replace_pre_code()
-
-
-my_craw = MyCrawler("http://coolshell.cn/articles/12012.html")
-my_craw.get_info_from_url()
-my_craw.get_article_content()
-
-
+#!/usr/bin/python# -*- coding: utf-8 -*-from lxml.html import soupparserfrom lxml import etreeimport reimport urllib2import timeimport sysclass Recursion(Exception):    passclass MyCrawler():    url = None    valuable = None    article_content = None    final_html = ""    copy_site_domain = None    my_domain = "http://%s/wp-content/uploads/%s" % (sys.argv[1], time.strftime('%Y/%m', time.localtime(time.time())))    url_compile = re.compile(r"http://(.*?)/")    root = None    def __init__(self, url):        self.url = url        compile_findall = self.url_compile.findall(url)        self.copy_site_domain = compile_findall[0]    def get_info_from_url(self):        self.root = soupparser.fromstring(urllib2.urlopen(self.url).read())    def replace_pre_code(self):        p = re.compile(r'<pre.*?brush:(.*?);.*?>([\s\S]*?)</pre>')        def func(m):            return '[' + m.group(1).strip() + ']' + m.group(2) + '[/' + m.group(1).strip() + ']'        self.final_html = p.sub(func, self.final_html)    @staticmethod    def filter_content(html):        if "感谢" in html or "原文链接" in html:            return True    @staticmethod    def filter_ending(html):        if "（全文完）" in html:            return True    def replace_img(self, html):        img_list = html.findall('.//img')        if len(img_list):            for img_tag in img_list:                img_src = img_tag.get("src")                new_image_url = self.my_domain + img_src[img_src.rindex("/"):]                img_tag.set('src', new_image_url)    def is_adaptive(self, url):        if self.url_compile.findall(url)[0] != self.copy_site_domain:            return True    def replace_url(self, html):        a_tag_list = html.findall('.//a')        for a_tag in a_tag_list:            is_img_url = False            url_href = a_tag.get('href')            if a_tag is not None:                child_img = a_tag.find('img')                if child_img is not None:                    img_src = child_img.get('src')                    if img_src[img_src.rindex("/"):] == url_href[url_href.rindex("/"):]:                        a_tag.set('href', img_src)                        is_img_url = True            if not is_img_url and self.is_adaptive(url_href):                # todo return article url                my_craw = MyCrawler(url_href)                my_craw.start()    def get_article_content(self):        article_sub_element = self.root.find('.//div[@class="post"]/div[@class="content"]')        for sub_element in article_sub_element:            piece_of_html = etree.tostring(sub_element, encoding="utf-8", method="html")            if self.filter_content(piece_of_html):                continue            if self.filter_ending(piece_of_html):                break            self.replace_img(piece_of_html)            self.replace_url(piece_of_html)            self.final_html += piece_of_html            self.replace_pre_code()    def start(self):        self.get_info_from_url()        self.get_article_content()my_craw = MyCrawler("http://coolshell.cn/articles/11541.html")my_craw.start()print my_craw.final_html
