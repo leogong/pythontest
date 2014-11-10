@@ -1,10 +1,9 @@
-# coding=utf-8
-from lxml import etree
-from lxml.html import soupparser
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import json
 
-__author__ = 'leo'
+aDict = {}
 
-html = soupparser.fromstring("<div><a href> aa </a></div>")
-html_findall = html.findall(".//a")
-for a in html_findall:
-    print etree.tostring(a, encoding="utf-8", method="html", pretty_print=True)
+aDict["我"] = "们"
+
+print  json.dumps(aDict, encoding='UTF-8', ensure_ascii=False)
