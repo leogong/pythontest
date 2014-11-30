@@ -1,8 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from lxml.html import soupparser
+# import MySQLdb,MySQLdb.cursors
+#
+#
+# conn = MySQLdb.connect(host="localhost", user="root", passwd="gonglin", db="test", port=3306,
+# charset='utf8', cursorclass=MySQLdb.cursors.DictCursor)
+# cur = conn.cursor()
+# print conn.insert_id()
 
-root = soupparser.fromstring("<a>aaaa</a>")
+html = "aaaabbbbccccc"
 
-if not len(root.findall(".//b")):
-    print "xxx"
+html = html.replace("a", "b")
+print html
