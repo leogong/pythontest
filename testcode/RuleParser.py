@@ -123,6 +123,7 @@ class RuleParser(object):
                         'but get {}, please check the rule to ensure it is true')
         return ret
 
+
 if __name__ == '__main__':
     rule = RuleParser('["and",[">", 0 , 0.05],[">", 3, 2]]')
     print rule.evaluate()
