@@ -36,14 +36,8 @@ class Method:
         self.modifier = modifier
         self.method_invocations = method_invocations
 
-    # def __str__(self):
-    #     return str(self.__dict__)
-    #
-    # def __eq__(self, other):
-    #     return self.__dict__ == other.__dict__
-
+    # todo 判断调用的方法与查找的方法签名是否一致
     def is_the_same(self, another):
-        # if self.name == another.name and len(self.parameters) ==
         pass
 
     @staticmethod
