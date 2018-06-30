@@ -3,8 +3,14 @@
 
 '''
 auto switch keyboard between different applications
-
 if you want to change the app list, modify the var 'ignore_list'
+一定要用系统自带的 python, 用 brew 或其他方式安装的 python 不能识别 AppKit 等模块，花了很长时间在 pyobjc 的文档中看到这样一句话：
+The system version of Python (``/usr/bin/python``) includes a copy of
+PyObjC starting at MacOSX 10.5 ("Leopard"). Installing other versions
+of PyObjC with "/usr/bin/python" on Leopard or later is not supported
+and could break your system.
+相见恨晚啊！
+用了 brew install python 的直接 brew uninstall python 即可，就是 python 不能使用最新版。
 '''
 
 from AppKit import NSWorkspace, NSWorkspaceDidActivateApplicationNotification, NSWorkspaceApplicationKey
@@ -15,12 +21,21 @@ import ctypes.util
 import objc
 import CoreFoundation
 
+import AppKit
+info = AppKit.NSBundle.mainBundle().infoDictionary()
+info["LSBackgroundOnly"] = "1"
+
 # add your custom apps here, check the bundle id in /Application/xx.app/Contents/info.plist
 
 ignore_list = [
     "com.googlecode.iterm2",
     "com.runningwithcrayons.Alfred-2",
-    "com.jetbrains.intellij.ce-EAP"
+    "com.runningwithcrayons.Alfred-3",
+    "com.apple.Spotlight",
+    "com.jetbrains.intellij.ce-EAP",
+    "com.google.android.studio",
+    "com.sublimetext.3",
+    "com.github.atom"
 ]
 
 
@@ -77,11 +92,12 @@ def select_kb(lang):
 
 class Observer(NSObject):
     def handle_(self, noti):
-        info = noti.userInfo().objectForKey_(NSWorkspaceApplicationKey)
-        bundleIdentifier = info.bundleIdentifier()
-        if bundleIdentifier in ignore_list:
-            print "found: %s active" % bundleIdentifier
-            select_kb(u'en')
+        # info = noti.userInfo().objectForKey_(NSWorkspaceApplicationKey)
+        # bundleIdentifier = info.bundleIdentifier()
+        # if bundleIdentifier in ignore_list:
+            #print "found: %s active" % bundleIdentifier
+            # select_kb(u'en')
+        select_kb(u'en')
 
 
 def main():
