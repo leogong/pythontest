@@ -29,13 +29,12 @@ info["LSBackgroundOnly"] = "1"
 
 ignore_list = [
     "com.googlecode.iterm2",
-    "com.runningwithcrayons.Alfred-2",
     "com.runningwithcrayons.Alfred-3",
     "com.apple.Spotlight",
-    "com.jetbrains.intellij.ce-EAP",
-    "com.google.android.studio",
-    "com.sublimetext.3",
-    "com.github.atom"
+    "com.jetbrains.intellij",
+    "com.jetbrains.pycharm"
+    #"com.sublimetext.3",
+    #"com.github.atom"
 ]
 
 
@@ -92,12 +91,14 @@ def select_kb(lang):
 
 class Observer(NSObject):
     def handle_(self, noti):
-        # info = noti.userInfo().objectForKey_(NSWorkspaceApplicationKey)
-        # bundleIdentifier = info.bundleIdentifier()
-        # if bundleIdentifier in ignore_list:
-            #print "found: %s active" % bundleIdentifier
-            # select_kb(u'en')
-        select_kb(u'en')
+        info = noti.userInfo().objectForKey_(NSWorkspaceApplicationKey)
+        bundleIdentifier = info.bundleIdentifier()
+        # print "current bundleIdentifier is %s" % bundleIdentifier
+        if bundleIdentifier in ignore_list:
+            print "found: %s active" % bundleIdentifier
+            select_kb(u'en')
+        # print "switch english for %s" % bundleIdentifier
+        # select_kb(u'en')
 
 
 def main():
