@@ -33,6 +33,10 @@ ignore_list = [
     "com.apple.Spotlight",
     "com.jetbrains.intellij",
     "com.jetbrains.pycharm"
+    "com.google.Chrome.canary",
+    "com.google.Chrome",
+    "org.mozilla.firefox",
+    "com.apple.Safari",
     #"com.sublimetext.3",
     #"com.github.atom"
 ]
