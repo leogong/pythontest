@@ -99,7 +99,7 @@ class Observer(NSObject):
         bundleIdentifier = info.bundleIdentifier()
         # print "current bundleIdentifier is %s" % bundleIdentifier
         if bundleIdentifier in ignore_list:
-            print "found: %s active" % bundleIdentifier
+            # print "found: %s active" % bundleIdentifier
             select_kb(u'en')
         # print "switch english for %s" % bundleIdentifier
         # select_kb(u'en')
